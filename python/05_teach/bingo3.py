@@ -16,28 +16,15 @@ lr = LinearRegression()
 data = lr.fit(x,y)
 
 
-new_x = np.array([10]).reshape((-1, 1))
-print(new_x)
 
-# print(x)
-# print(y)
+new_x = np.array(x).reshape((-1, 1))
 
 
+d = lr.predict(new_x)
+
+print(d)
 
 
-# # Create a linear regression model
-# lr = LinearRegression()
+dc=pd.concat([DB.reset_index(),pd.Series(d, name='predicted')], axis='columns')
+print(dc)
 
-
-
-# # Fit the model to the data
-# lr.fit(x,y)
-
-
-
-
-# x_new = np.array(x).reshape((-1, 1))
-# y_new = lr.predict(x_new)
-
-# plt.scatter(x, y)
-# plt.plot(x, model.predict(x), color='green')
