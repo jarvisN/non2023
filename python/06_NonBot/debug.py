@@ -1,38 +1,33 @@
+# import library
 import pandas as pd
-
-# Create a sample DataFrame
-df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
-
-# Convert the DataFrame to a string
-df_string = df.to_string()
-
-print(df_string)
-
-print("\n ================================================= \n")
-
-
-# Create a sample DataFrame
-df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
-
-# Convert the DataFrame to a string with a tabular format
-table_string = df.to_string(index=False, justify='left')
-
-print(table_string)
-
-
-print("\n ================================================= \n")
-
-
 from tabulate import tabulate
+from polygon import RESTClient
+from polygon.rest.models.request import RequestOptionBuilder
 
-# Create a sample DataFrame
-df = pd.DataFrame({'id': [1, 2, 3], 'name': ['Alice', 'Bob', 'Charlie'], 'age': [25, 30, 35]})
+# # create client
+# c = RESTClient(api_key="sgI3UObKfOdY6Esk6_Z77g6rfnPpUgZx")
 
-# Format the DataFrame using tabulate
-table = tabulate(df, headers='keys', tablefmt='psql')
+# # get response
+# # res = c.get_aggs("AAPL", 1, "day", "2023-03-22", "2023-03-24")
+# res = c.get_aggs("C:XAUUSD", 1, "day", "2023-03-23", "2023-03-24")
+# print(res)
 
-print(table)
+# print("\n ================================================= \n")
+# # print(res[0])
+
+# for i in range(len(res)):
+#     print(f'Round : {i+1}')
+#     print(res[i])
+#     print("\n ================================================= \n")
 
 
-# # Send the table as a message using Nextcord
-# await interaction.send(f'```\n{table}\n```')
+# print(f'open : {res[0].open}')
+
+
+# # Create a sample DataFrame
+# df = pd.DataFrame({'id': [1, 2, 3], 'name': ['Alice', 'Bob', 'Charlie'], 'age': [25, 30, 35]})
+
+# # Format the DataFrame using tabulate
+# table = tabulate(df, headers='keys', tablefmt='psql',showindex=False)
+
+# print(table)
