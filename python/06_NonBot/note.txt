@@ -1,7 +1,11 @@
-polygon :   is a financial data provider that offers real-time and historical market data for 
-            stocks, cryptocurrencies, and other financial instruments.
+polygon     :   is a financial data provider that offers real-time and historical market data for 
+                stocks, cryptocurrencies, and other financial instruments.
 
-Link    :   https://polygon.io/dashboard/api-keys
+Link        :   https://polygon.io/dashboard/api-keys
 
-API     :   sgI3UObKfOdY6Esk6_Z77g6rfnPpUgZx
+API         :   sgI3UObKfOdY6Esk6_Z77g6rfnPpUgZx
 
+
+Nextcord    :   Discord API
+
+API Key     :   MTA4OTc5ODk2NDgxNzE3ODc0NQ.GOEICC.BcEcsytgxYcka-_Ljb16XvXY9JYlvijMgK5VC4
