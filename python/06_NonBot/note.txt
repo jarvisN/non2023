@@ -8,4 +8,4 @@ API         :   sgI3UObKfOdY6Esk6_Z77g6rfnPpUgZx
 
 Nextcord    :   Discord API
 
-API Key     :   MTA4OTc5ODk2NDgxNzE3ODc0NQ.GgUZW5._dJUD8p0q7TGn2upX9ybiygUfj5UPGrwu0dJkg
+API Key     :   MTA4OTc5ODk2NDgxNzE3ODc0NQ.GkLCVv.EfR8otdXaLYdRSnHMjlMNRKnLoyPWydQvq72zs
