@@ -49,11 +49,15 @@ async def non2(interaction: nextcord.Interaction, data3: str):
 
     await interaction.send(f'{response.text}')
 
+@bot.slash_command(name="fff")
+async def non2(interaction: nextcord.Interaction, data3: str):
 
 
+    payload = {'key1': 'value1', 'key2': 'value2'}
+    headers = {'content-type': 'application/json'}
+    url = 'http://127.0.0.1:5000/myapi'
 
-@bot.event
-async def on_ready():
-    print(f'logged in as {bot.user}')
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    print(response.text)
 
-bot.run(Token)
+    await interaction.send(f'{response.text}')
