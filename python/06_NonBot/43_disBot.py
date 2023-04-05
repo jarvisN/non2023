@@ -110,7 +110,10 @@ async def non2(interaction: nextcord.Interaction, ticket: str, start: str, to: s
     print(response.text)
 
     await interaction.send(f'{response.text}')
-
+    
+@bot.slash_command(name="jjj")
+async def test(interaction: nextcord.Interaction,test:str,description="test"):
+    await interaction.send(f'test description')
     
 @bot.event
 async def on_ready():
