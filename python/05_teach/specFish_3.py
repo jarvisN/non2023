@@ -3,6 +3,9 @@ from multiprocessing import Pool
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+import pandas as pd
+import matplotlib.pyplot as plt
 
 def find_best_params(param_range):
     """
@@ -54,3 +57,21 @@ best_param = max(results, key=lambda x: x[2])
 print(f"Best Accuracy: {best_param[2]}")
 print(f"Best C: {best_param[0]}")
 print(f"Best Gamma: {best_param[1]}")
+
+
+# # Extract the values of C, gamma and accuracy from the results
+# C_values = [result[0] for result in results]
+# gamma_values = [result[1] for result in results]
+# accuracy_values = [result[2] for result in results]
+
+# # Create a scatter plot with C and gamma as the x and y axes, and accuracy as the color
+# plt.scatter(C_values, gamma_values, c=accuracy_values, cmap='coolwarm')
+# plt.colorbar()
+
+# # Set the labels and title of the plot
+# plt.xlabel('C')
+# plt.ylabel('Gamma')
+# plt.title('Accuracy vs C and Gamma')
+
+# # Show the plot
+# plt.show()
