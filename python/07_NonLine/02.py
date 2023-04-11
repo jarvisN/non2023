@@ -13,6 +13,7 @@ channel_access_token = 'DBbr1bR0GAPMDtB0nmZUgugF8qsP/SxN6J3+ysRlD5XpC55kqcljAOF5
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -30,25 +31,16 @@ def callback():
     return 'OK'
 
 
+@app.route("/test", methods=['GET'])
+def test():
+    return "Ok test"
 
 
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     # extract user's message
-#     user_text = event.message.text
-    
-#     print(user_text)
-
-    # # reply to user
-    # line_bot_api.reply_message(
-    #     event.reply_token,
-    #     TextSendMessage(text=user_text))
-    
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # extract user's message
     user_text = event.message.text
-    
+
     # check if user's message is "test"
     if user_text == "test":
         # reply to user
@@ -59,5 +51,6 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
+    host = '192.168.127.129'
     port = 5000  # replace with the actual port number you want to use
-    app.run(debug=True, port=port)
+    app.run(debug=True, host=host, port=port, ssl_context="adhoc")
