@@ -1,0 +1,7 @@
+Channel access token : 
+
+DBbr1bR0GAPMDtB0nmZUgugF8qsP/SxN6J3+ysRlD5XpC55kqcljAOF5dh0gHFay7o/NbVCNYTbpS1JWZiGEMmocmW/0yIV1XytI/z2jKeXtsC420gPjps5VfjJsPOijeQmue43vxblLFuX79D1eFQdB04t89/1O/w1cDnyilFU=
+
+Channel secret :
+
+256ffc324a9dae86ebb2036e816a7f1f

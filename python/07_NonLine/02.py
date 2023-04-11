@@ -1,0 +1,63 @@
+
+from flask import Flask, request, abort
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+
+app = Flask(__name__)
+
+# set LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variable
+channel_secret = '256ffc324a9dae86ebb2036e816a7f1f'
+channel_access_token = 'DBbr1bR0GAPMDtB0nmZUgugF8qsP/SxN6J3+ysRlD5XpC55kqcljAOF5dh0gHFay7o/NbVCNYTbpS1JWZiGEMmocmW/0yIV1XytI/z2jKeXtsC420gPjps5VfjJsPOijeQmue43vxblLFuX79D1eFQdB04t89/1O/w1cDnyilFU='
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
+
+
+
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     # extract user's message
+#     user_text = event.message.text
+    
+#     print(user_text)
+
+    # # reply to user
+    # line_bot_api.reply_message(
+    #     event.reply_token,
+    #     TextSendMessage(text=user_text))
+    
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    # extract user's message
+    user_text = event.message.text
+    
+    # check if user's message is "test"
+    if user_text == "test":
+        # reply to user
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="This is a test message")
+        )
+
+
+if __name__ == "__main__":
+    port = 5000  # replace with the actual port number you want to use
+    app.run(debug=True, port=port)
