@@ -1,10 +1,12 @@
 
 from flask import Flask, request, abort
+from flask_sslify import SSLify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 # set LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variable
 channel_secret = '256ffc324a9dae86ebb2036e816a7f1f'
@@ -54,5 +56,4 @@ if __name__ == "__main__":
     # host = '171.103.221.226'
     host = '0.0.0.0'
     port = 5000  # replace with the actual port number you want to use
-    # app.run(debug=True, host=host, port=port, ssl_context="adhoc")
     app.run(debug=True, host=host, port=port)
