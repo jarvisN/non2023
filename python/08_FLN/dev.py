@@ -5,17 +5,23 @@ import secrets
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+import hashlib
+
+def sha256(message):
+    return hashlib.sha256(message.encode()).hexdigest()
+
+
 # Set up the database connection details
 db_host = '128.199.245.117'
-db_port = '3306'
+db_port = 3306
 db_username = 'non'
 db_password = '662542'
 db_database = 'login_system'
 
 # Define the home page route
-@app.route('/testNon')
+@app.route('/testNon/')
 def home():
-    return render_template('html/home.html')
+    return render_template('/html/home.html')
 
 # Define the login route
 @app.route('/testNon/login', methods=['GET', 'POST'])
@@ -23,6 +29,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        password = sha256(password)
 
         # Connect to the database and retrieve the user information
         conn = mariadb.connect(
@@ -30,7 +37,7 @@ def login():
             password=db_password,
             host=db_host,
             port=db_port,
-            database=db_database
+            database=db_database    
         )
         cursor = conn.cursor()
         cursor.execute(f"SELECT username , password  FROM users WHERE username='{username}' AND password='{password}'")
@@ -39,7 +46,7 @@ def login():
         # If the user exists, set the session user ID and redirect to the dashboard
         if user:
             session['user_id'] = user[0]
-            return redirect('/dashboard')
+            return redirect('/testNon/dashboard')
         else:
             return render_template('html/login.html', error='Invalid username or password')
     else:
@@ -48,17 +55,19 @@ def login():
 @app.route('/testNon/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = chr(request.form['username'])
-        password = chr(request.form['password'])
-        email = chr(request.form['email'])
-        print("\n ======================================= \n")
-        print("test")
-        print("\n ======================================= \n")
-        print("\n ======================================= \n")
-        print(type(username))
-        print(type(password))
-        print(type(email))
-        print("\n ======================================= \n")
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        password = sha256(password)
+        
+        # print("\n ======================================= \n")
+        # print("test")
+        # print("\n ======================================= \n")
+        # print("\n ======================================= \n")
+        # print(type(username))
+        # print(type(password))
+        # print(type(email))
+        # print("\n ======================================= \n")
         
         
 
@@ -71,13 +80,16 @@ def register():
             database=db_database
         )
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s)", (username, password, email))
+        cursor.execute(f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')")
         conn.commit()
 
         # Redirect the user to the login page
-        return redirect('testNon/login')
+        return redirect('/testNon/login')
     else:
         return render_template('html/register.html')
+    
+    
+   
 
 # Define the dashboard route
 @app.route('/testNon/dashboard')
@@ -97,9 +109,11 @@ def dashboard():
         user = cursor.fetchone()
 
         # Render the dashboard template with the user information
-        return render_template('html/dashboard.html', user=user)
+        return render_template('/html/dashboard.html', user=user)
     else:
         return redirect('/login')
+
+    
 
 if __name__ == '__main__':
     app.run()
