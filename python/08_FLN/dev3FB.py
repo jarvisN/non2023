@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 import mariadb
+from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 import secrets
 import hashlib
 
@@ -8,8 +8,8 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 # Set up the Facebook blueprint
-app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "your-client-id"
-app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "your-client-secret"
+app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "193911316826522"
+app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "67e63e4ce5e1d5d3614ec2bbe0d9ef0d"
 blueprint = make_facebook_blueprint(scope="email")
 app.register_blueprint(blueprint, url_prefix="/login")
 
