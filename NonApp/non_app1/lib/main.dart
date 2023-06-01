@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// flutter run -d chrome --web-browser-flag "--disable-web-security" 
+
+
+
 void main() {
   runApp(MyApp());
 }
@@ -42,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await http.get(Uri.parse('http://127.0.0.1:5000/api/data'));
 
     print(response.body);
+    
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON.
