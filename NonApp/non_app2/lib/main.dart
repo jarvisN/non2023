@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             DropdownButton<String?>(
               value: dropdownValue,
-              items: <String?>[null, 'Setting Info', 'Config Firmware']
+              items: <String?>[null, 'Setting Info', 'Config Firmware','Lux']
                   .map<DropdownMenuItem<String?>>((String? value) {
                 return DropdownMenuItem<String?>(
                   value: value,
