@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/setting_info.dart';
 import 'data/config_firmware.dart';
+import 'data/lux.dart';
 import 'dart:convert';
 
 void main() {
@@ -39,10 +40,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> fetchData() async {
-    if(dropdownValue == 'Setting Info') {
+    if (dropdownValue == 'Setting Info') {
       data = settingInfo.fetchData();
-    } else if(dropdownValue == 'Config Firmware') {
+    } else if (dropdownValue == 'Config Firmware') {
       data = configFirmware.fetchData();
+    } else if (dropdownValue == 'Lux') {
+      data = Lux.fetchData();
     }
     setState(() {});
   }
@@ -65,7 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             DropdownButton<String?>(
               value: dropdownValue,
-              items: <String?>[null, 'Setting Info', 'Config Firmware'].map<DropdownMenuItem<String?>>((String? value) {
+              items: <String?>[null, 'Setting Info', 'Config Firmware']
+                  .map<DropdownMenuItem<String?>>((String? value) {
                 return DropdownMenuItem<String?>(
                   value: value,
                   child: Text(value ?? 'None'),
@@ -82,18 +86,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
             ),
-            data == null ? Text('No data') : FutureBuilder<String>(
-              future: data,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) { 
-                  String prettyPrintedData = prettyPrintJson(snapshot.data!);
-                  return Text(prettyPrintedData);
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-                return CircularProgressIndicator();
-              },
-            ),
+            data == null
+                ? Text('No data')
+                : FutureBuilder<String>(
+                    future: data,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        String prettyPrintedData =
+                            prettyPrintJson(snapshot.data!);
+                        return Text(prettyPrintedData);
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      return CircularProgressIndicator();
+                    },
+                  ),
           ],
         ),
       ),
