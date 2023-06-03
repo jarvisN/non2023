@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'setting_info.dart';
-
-// flutter run -d chrome --web-browser-flag "--disable-web-security"
+import 'data/setting_info.dart';
+import 'data/config_firmware.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,11 +30,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<String> data;
+  String dropdownValue = 'Setting Info';
 
   @override
   void initState() {
     super.initState();
-    data = settingInfo.fetchData();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    if(dropdownValue == 'Setting Info') {
+      data = settingInfo.fetchData();
+    } else if(dropdownValue == 'Config Firmware') {
+      data = configFirmware.fetchData();
+    }
+    setState(() {});
   }
 
   @override
@@ -45,17 +54,35 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title!),
       ),
       body: Center(
-        child: FutureBuilder<String>(
-          future: data,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text('${snapshot.data}');
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
-          },
+        child: Column(
+          children: [
+            DropdownButton<String>(
+              value: dropdownValue,
+              items: <String>['Setting Info', 'Config Firmware'].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                  fetchData();
+                });
+              },
+            ),
+            FutureBuilder<String>(
+              future: data,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text('${snapshot.data}');
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                return CircularProgressIndicator();
+              },
+            ),
+          ],
         ),
       ),
     );
