@@ -34,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<String>? data;
   String? dropdownValue;
+  String? inputFieldData;
 
   @override
   void initState() {
@@ -68,11 +69,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          children: [
+          children: [TextField(
+              onChanged: (String? value) {
+                setState(() {
+                  inputFieldData = value;
+                });
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Input Field',
+              ),
+            ),
             DropdownButton<String?>(
               value: dropdownValue,
-              items: <String?>[null, 'Setting Info', 'Config Firmware', 'Lux', 'Weight']
-                  .map<DropdownMenuItem<String?>>((String? value) {
+              items: <String?>[
+                null,
+                'Setting Info',
+                'Config Firmware',
+                'Lux',
+                'Weight'
+              ].map<DropdownMenuItem<String?>>((String? value) {
                 return DropdownMenuItem<String?>(
                   value: value,
                   child: Text(value ?? 'None'),
