@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'data/setting_info.dart';
 import 'data/config_firmware.dart';
-import 'data/lux.dart';
+import 'data/getLux.dart';
+import 'data/getWeight.dart';
 import 'dart:convert';
 
 void main() {
@@ -46,6 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
       data = configFirmware.fetchData();
     } else if (dropdownValue == 'Lux') {
       data = Lux.fetchData();
+    } else if (dropdownValue == 'Weight') {
+      data = Weight.fetchData();
     }
     setState(() {});
   }
@@ -68,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             DropdownButton<String?>(
               value: dropdownValue,
-              items: <String?>[null, 'Setting Info', 'Config Firmware','Lux']
+              items: <String?>[null, 'Setting Info', 'Config Firmware', 'Lux', 'Weight']
                   .map<DropdownMenuItem<String?>>((String? value) {
                 return DropdownMenuItem<String?>(
                   value: value,
