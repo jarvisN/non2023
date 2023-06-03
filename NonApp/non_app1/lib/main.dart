@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> fetchData() async {
     final response =
-        await http.get(Uri.parse('http://192.168.137.138/rest/setting/info'));
+        await http.get(Uri.parse('http://192.168.137.69/rest/setting/info'));
 
     print(response.body);
     
