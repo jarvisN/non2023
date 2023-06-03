@@ -78,8 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
             data == null ? Text('No data') : FutureBuilder<String>(
               future: data,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text('${snapshot.data}');
+                if (snapshot.hasData) { // Convert the data to a Map.
+                  Map<String, dynamic> dataMap = jsonDecode(snapshot.data!);
+                  // Create a JsonEncoder with pretty printing.
+                  JsonEncoder encoder = JsonEncoder.withIndent('  ');
+                  // Use the encoder to convert the Map to a pretty printed string.
+                  String prettyPrintedData = encoder.convert(dataMap);
+                  return Text(prettyPrintedData);
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
