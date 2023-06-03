@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/setting_info.dart';
 import 'data/config_firmware.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // Removed fetchData() from here as initially no value is selected.
   }
 
   Future<void> fetchData() async {
@@ -45,6 +45,13 @@ class _MyHomePageState extends State<MyHomePage> {
       data = configFirmware.fetchData();
     }
     setState(() {});
+  }
+
+  String prettyPrintJson(String jsonString) {
+    var json = jsonDecode(jsonString);
+    var encoder = JsonEncoder.withIndent('  ');
+    String prettyString = encoder.convert(json);
+    return prettyString;
   }
 
   @override
@@ -78,12 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
             data == null ? Text('No data') : FutureBuilder<String>(
               future: data,
               builder: (context, snapshot) {
-                if (snapshot.hasData) { // Convert the data to a Map.
-                  Map<String, dynamic> dataMap = jsonDecode(snapshot.data!);
-                  // Create a JsonEncoder with pretty printing.
-                  JsonEncoder encoder = JsonEncoder.withIndent('  ');
-                  // Use the encoder to convert the Map to a pretty printed string.
-                  String prettyPrintedData = encoder.convert(dataMap);
+                if (snapshot.hasData) { 
+                  String prettyPrintedData = prettyPrintJson(snapshot.data!);
                   return Text(prettyPrintedData);
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
