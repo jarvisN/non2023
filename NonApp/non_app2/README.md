@@ -1,3 +1,3 @@
-# non_app2
+# non_app1
 
 A new Flutter project.
