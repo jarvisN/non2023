@@ -29,13 +29,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<String> data;
-  String dropdownValue = 'Setting Info';
+  Future<String>? data;
+  String? dropdownValue;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    // Removed fetchData() from here as initially no value is selected.
   }
 
   Future<void> fetchData() async {
@@ -56,22 +56,26 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            DropdownButton<String>(
+            DropdownButton<String?>(
               value: dropdownValue,
-              items: <String>['Setting Info', 'Config Firmware'].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
+              items: <String?>[null, 'Setting Info', 'Config Firmware'].map<DropdownMenuItem<String?>>((String? value) {
+                return DropdownMenuItem<String?>(
                   value: value,
-                  child: Text(value),
+                  child: Text(value ?? 'None'),
                 );
               }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
-                  dropdownValue = newValue!;
-                  fetchData();
+                  dropdownValue = newValue;
+                  if (dropdownValue != null) {
+                    fetchData();
+                  } else {
+                    data = null;
+                  }
                 });
               },
             ),
-            FutureBuilder<String>(
+            data == null ? Text('No data') : FutureBuilder<String>(
               future: data,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
