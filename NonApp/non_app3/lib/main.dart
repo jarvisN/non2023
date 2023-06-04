@@ -38,18 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
         await http.get(Uri.parse('http://192.168.239.28:3000/ccapi'));
 
     if (response.statusCode == 200) {
+      print(response.body);
       return response.body;
     } else {
       throw Exception('Failed to load post');
     }
   }
 
-  String prettyPrintJson(String jsonString) {
-    var json = jsonDecode(jsonString);
-    var encoder = JsonEncoder.withIndent('  ');
-    String prettyString = encoder.convert(json);
-    return prettyString;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,17 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
-                return CircularProgressIndicator();
               },
             ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  data = fetchData();
-                });
-              },
-              child: Text('Fetch Data'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       MyLib.performAction();
+            //     });
+            //   },
+            //   child: Text('Fetch Data'),
+            // ),
           ],
         ),
       ),

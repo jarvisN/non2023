@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// flutter run -d chrome --web-browser-flag "--disable-web-security" 
-
-
+// flutter run -d chrome --web-browser-flag "--disable-web-security"
 
 void main() {
   runApp(MyApp());
@@ -42,16 +40,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> fetchData() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.239.28:3000/ccapi'));
+    final response = await http.post(
+      Uri.parse(
+          'http://192.168.239.28:3000/ccapi/ver100/shooting/control/shutterbutton'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, bool>{"af": true}),
+    );
 
-    print(response.body);
-    
+    // final response =
+    //     await http.get(Uri.parse('http://192.168.239.28:3000/ccapi'));
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON.
       // return jsonDecode(response.body)['key'];
-
+      print(response.body);
       return response.body;
     } else {
       // If the server did not return a 200 OK response,
