@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+// import 'package:non_app3/takePic.dart';
 import 'dart:convert';
+import 'autoFocus.dart';
+import 'takePic.dart';
 
-// flutter run -d chrome --web-browser-flag "--disable-web-security"
 
 void main() {
   runApp(MyApp());
@@ -35,17 +37,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String> fetchData() async {
     final response =
-        await http.get(Uri.parse('http://192.168.239.28:3000/ccapi'));
+        await http.get(Uri.parse('http://192.168.137.233:3000/ccapi'));
 
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
       return response.body;
     } else {
       throw Exception('Failed to load post');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +61,41 @@ class _MyHomePageState extends State<MyHomePage> {
               future: data,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text("status connect with camera : ok");
+                  return Text("Status connect with camera : ok");
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
               },
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     setState(() {
-            //       MyLib.performAction();
-            //     });
-            //   },
-            //   child: Text('Fetch Data'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  data = fetchData();
+                });
+              },
+              child: Text('Check Connection'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  AutoFocus();
+                });
+              },
+              child: Text('Auto Focus'),
+            ),
+
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    TakePic();
+                  });
+                },
+                child: Text('Take Image'),
+                ),
+
           ],
         ),
       ),
