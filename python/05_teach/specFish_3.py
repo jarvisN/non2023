@@ -1,11 +1,16 @@
 import numpy as np
+import pandas as pd 
 from multiprocessing import Pool
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+<<<<<<< Updated upstream
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 import pandas as pd
 import matplotlib.pyplot as plt
+=======
+from sklearn.preprocessing import LabelEncoder
+>>>>>>> Stashed changes
 
 def find_best_params(param_range):
     """
