@@ -11,23 +11,25 @@ tello.connect()
 
 # frame_read = tello.get_frame_read()
 
-# tello.takeoff()
+tello.takeoff()
 
 # cv2.imwrite("test.png",frame_read.frame)
 
-# tello.move_forward(200)
-# tello.rotate_counter_clockwise(90)
-# tello.move_left(100)
+tello.move_forward(200)
+tello.rotate_counter_clockwise(90)
+tello.move_left(100)
 
 # time.sleep(10)
 
-# tello.flip("l")
+tello.flip("f")
 
 # print()
 tello.query_battery()
+# tello.get_flight_time()
+tello.get_battery()
 
 
 # tello.enable_mission_pads()
 # tello.set_mission_pad_detection_direction(1)
 
-# tello.land();
+tello.land();
