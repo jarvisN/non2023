@@ -33,7 +33,7 @@ tello.flip_right()
 
 tello.enable_mission_pads()
 tello.disable_mission_pads()
+tello.set_mission_pad_detection_direction()  # 0 : downwards / 1 : forwards only / 2 : both directions
+tello.get_mission_pad_id() # take number from mission pad 
 
-# 0 : downwards / 1 : forwards only / 2 : both directions
-tello.set_mission_pad_detection_direction() 
-
+# ============================================ #
