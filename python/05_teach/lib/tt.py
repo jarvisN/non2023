@@ -6,18 +6,8 @@ class Non:
     def plus(self, num1, num2):
         # บวกเลข num1 และ num2 และเก็บผลลัพธ์ไว้ในตัวแปร result
         self.result = num1 + num2
-        
-        # print("qwerty")
-        return self.result
-
-        # return "ok"
-    def test(self):
-        print(1234)
-        return 5678
+        # return self.result
 
     def __str__(self):
         # แสดงผลลัพธ์ในรูปแบบ "Result: {result}"
         # return f"Result : {self.result}"
-        # print('awer')
-        # return "1234"
-        pass
