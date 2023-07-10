@@ -37,3 +37,13 @@ tello.set_mission_pad_detection_direction()  # 0 : downwards / 1 : forwards only
 tello.get_mission_pad_id() # take number from mission pad 
 
 # ============================================ #
+
+tello.get_temperature()
+tello.get_battery()
+tello.get_height()
+tello.get_acceleration_x()
+tello.get_acceleration_y()
+tello.get_acceleration_z()
+tello.get_distance_tof()
+
+# ============================================ #

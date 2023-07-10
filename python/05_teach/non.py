@@ -1,9 +1,8 @@
-def non():
-    x = 10
-    y = 'among us'
-    return x , y
+import matplotlib.pyplot as plt
 
 
-print(non())
-print(type(non()))
-print(non()[0])
+xpoints = [0,1,2]
+ypoints = [0,9,5]
+
+plt.plot(xpoints, ypoints)
+plt.show()
