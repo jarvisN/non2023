@@ -14,11 +14,12 @@ class _MyAppState extends State<MyApp> {
   String responseText = '';
 
   Future<void> _sendRequest() async {
-    const url = '127.0.0.1:5000'; // Replace with your server endpoint
+    const url = 'http://127.0.0.1:5000'; // เปลี่ยนเป็นเซิร์ฟเวอร์ Flask ของคุณ
     const message = 'open';
 
     try {
       final response = await http.get(Uri.parse('$url/data?data=$message'));
+
       if (response.statusCode == 200) {
         setState(() {
           responseText = 'Response from server: ' + response.body;
