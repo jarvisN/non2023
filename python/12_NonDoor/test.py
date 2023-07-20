@@ -1,5 +1,9 @@
 from flask import Flask, request
 from flask_cors import CORS
+import pyotp
+
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -23,6 +27,17 @@ def receive_data():
 @app.route('/test', methods = ['GET'])
 def test():
     return "test"
+
+@app.route('/generate_otp')
+def generate_otp():
+    # สร้างรหัสลับ (Secret Key) แบบสุ่ม
+    secret_key = pyotp.random_base32()
+
+    # สร้าง OTP
+    otp = pyotp.TOTP(secret_key)
+    otp_code = otp.now()
+
+    return {'otp': otp_code}
 
 if __name__ == '__main__':
     app.run()

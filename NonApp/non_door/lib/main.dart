@@ -14,7 +14,7 @@ class _MyAppState extends State<MyApp> {
   String responseText = '';
 
   Future<void> _sendRequest() async {
-    const url = 'http://127.0.0.1:5000'; // เปลี่ยนเป็นเซิร์ฟเวอร์ Flask ของคุณ
+    const url = 'http://127.0.0.1:5000';
     const message = 'open';
 
     try {
