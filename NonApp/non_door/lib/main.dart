@@ -1,62 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String responseText = '';
-
-  Future<void> _sendRequest() async {
-    const url = 'http://127.0.0.1:5000';
-    const message = 'open';
-
-    try {
-      final response = await http.get(Uri.parse('$url/data?data=$message'));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          responseText = 'Response from server: ' + response.body;
-        });
-      } else {
-        setState(() {
-          responseText = 'Request failed with status: ${response.statusCode}.';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        responseText = 'Error sending request: $e';
-      });
-    }
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'OTP App',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('HTTP Request Example'),
+          title: Text('OTP App'),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _sendRequest,
-                child: const Text('Send Request'),
-              ),
-              const SizedBox(height: 20),
-              Text(responseText),
-            ],
+          child: ElevatedButton(
+            onPressed: () {
+              fetchAndVerifyOTP(context);
+            },
+            child: Text('เข้าใช้แอป'),
           ),
         ),
       ),
     );
+  }
+
+  void fetchAndVerifyOTP(BuildContext context) async {
+    try {
+      final response = await http.get(Uri.parse('http://your-server-url/generate_otp'));
+      if (response.statusCode == 200) {
+        final otp = response.body;
+
+        // นี่คือตัวอย่างการส่ง OTP ไปยังแอปที่อื่น เช่นการเปิดหน้าใหม่ในแอปหรือทำการนำ OTP ไปใช้ในส่วนอื่นของแอป
+        // ในตัวอย่างนี้จะแสดงแค่กล่องข้อความแสดง OTP
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('OTP'),
+              content: Text('OTP ที่ได้รับคือ: $otp'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        throw Exception('ไม่สามารถรับ OTP ได้');
+      }
+    } catch (error) {
+      print('เกิดข้อผิดพลาดในการรับ OTP: $error');
+    }
   }
 }
