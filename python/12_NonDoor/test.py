@@ -28,12 +28,9 @@ def receive_data():
 def test():
     return "test"
 
-@app.route('/generate_otp')
+@app.route('/generate_otp', methods = ['GET'])
 def generate_otp():
-    # สร้างรหัสลับ (Secret Key) แบบสุ่ม
     secret_key = pyotp.random_base32()
-
-    # สร้าง OTP
     otp = pyotp.TOTP(secret_key)
     otp_code = otp.now()
 
