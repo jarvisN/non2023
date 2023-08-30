@@ -42,6 +42,7 @@ def main():
     balls = [create_new_ball() for _ in range(3)]
     start_time = time.time()
     game_time = time.time()
+    ball_create_time = time.time()
     
     while running:
         # Check for quit event
@@ -55,17 +56,15 @@ def main():
             print("Time's up! Your score is:", score)
             running = False
         
-        # Create a new ball every 3 seconds
+        # Create a new ball every 1 second
         current_time = time.time()
-        if current_time - start_time >= 1:
+        if current_time - ball_create_time >= 1:
             if len(balls) < 5 or len(balls) > 0:
                 balls.append(create_new_ball())
             else:
                 print("Too many balls! Your score is:", score)
-                # running = False
-                running = True
-            start_time = current_time
-
+                running = False
+            ball_create_time = current_time
         
         # Check if data is available from ESP32
         if ser.in_waiting:
@@ -86,14 +85,13 @@ def main():
                     score += 1
         
         # Move the balls
+        new_balls = []
         for ball in balls:
-            ball['x'] += ball['dx']
-            ball['y'] += ball['dy']
-            
-            # Decrease the score if the ball reaches the bottom
-            if ball['y'] > height - 50:
-                score -= 1
-                ball['dy'] = 0
+            if ball['y'] <= height - 50:
+                ball['x'] += ball['dx']
+                ball['y'] += ball['dy']
+                new_balls.append(ball)
+        balls = new_balls
         
         # Draw the balls and text
         window.fill(white)
