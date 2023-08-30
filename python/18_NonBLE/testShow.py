@@ -2,6 +2,7 @@ import pygame
 import random
 import serial
 import time
+import os
 
 # Initialize pygame
 pygame.init()
@@ -20,16 +21,23 @@ black = (0, 0, 0)
 
 # Set up serial port
 ser = serial.Serial('/dev/tty.usbserial-0001', 115200)
+balloon_img = pygame.image.load(os.path.join('balloon.png'))
+balloon_img = pygame.transform.scale(balloon_img, (100, 200))
+
+
 
 def create_new_ball():
     return {'x': random.randint(50, width-50), 'y': 50, 'dx': 0, 'dy': 0.125, 'number': random.randint(1, 5)}
 
 def draw_ball(number, x, y):
-    # Draw the circle
-    pygame.draw.circle(window, black, (x, y), 50, 5)
+    # # Draw the circle
+    # pygame.draw.circle(window, black, (x, y), 50, 5)
+
+    window.blit(balloon_img, (x - balloon_img.get_width() / 2, y - balloon_img.get_height() / 2))
+    
     
     # Draw the ball number
-    text = font.render(str(number), True, (255, 0, 0))
+    text = font.render(str(number), True, (0, 0, 0))
     window.blit(text, (x - text.get_width() / 2, y - text.get_height() / 2))
 
 def draw_text(text, x, y):
