@@ -15,5 +15,5 @@ void loop() {
   String randomNumberString = String(randomNumber); // Convert random number to string
   SerialBT.println(randomNumberString); //Send Data
   Serial.println(randomNumber);
-  delay(1000); // Delay for 1 second
+  delay(500); // Delay for 1 second
 }

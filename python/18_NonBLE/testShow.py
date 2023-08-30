@@ -22,21 +22,26 @@ black = (0, 0, 0)
 ser = serial.Serial('/dev/tty.usbserial-0001', 115200)
 
 def create_new_ball():
-    return {'x': random.randint(50, width-50), 'y': random.randint(50, height-50), 'dx': 0, 'dy': 0.25, 'number': random.randint(1, 5)}
+    return {'x': random.randint(50, width-50), 'y': 50, 'dx': 0, 'dy': 0.125, 'number': random.randint(1, 5)}
 
 def draw_ball(number, x, y):
     # Draw the circle
-    pygame.draw.circle(window, black, (x, y), 50, 5)  # the last parameter is the width of the circle outline
+    pygame.draw.circle(window, black, (x, y), 50, 5)
     
     # Draw the ball number
-    text = font.render(str(number), True, (255, 0, 0))  # change text color to red
+    text = font.render(str(number), True, (255, 0, 0))
     window.blit(text, (x - text.get_width() / 2, y - text.get_height() / 2))
+
+def draw_text(text, x, y):
+    surface = font.render(text, True, black)
+    window.blit(surface, (x, y))
 
 def main():
     running = True
     score = 0
     balls = [create_new_ball() for _ in range(3)]
     start_time = time.time()
+    game_time = time.time()
     
     while running:
         # Check for quit event
@@ -44,15 +49,23 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         
+        # End game after 30 seconds
+        current_game_time = time.time()
+        if current_game_time - game_time >= 30:
+            print("Time's up! Your score is:", score)
+            running = False
+        
         # Create a new ball every 3 seconds
         current_time = time.time()
-        if current_time - start_time >= 3:
-            if len(balls) < 15:
+        if current_time - start_time >= 1:
+            if len(balls) < 5 or len(balls) > 0:
                 balls.append(create_new_ball())
             else:
-                print("Game over! Your score is:", score)
-                running = False
+                print("Too many balls! Your score is:", score)
+                # running = False
+                running = True
             start_time = current_time
+
         
         # Check if data is available from ESP32
         if ser.in_waiting:
@@ -77,15 +90,18 @@ def main():
             ball['x'] += ball['dx']
             ball['y'] += ball['dy']
             
-            # Bounce the balls off the walls
-            if ball['y'] < 50 or ball['y'] > height - 50:
-                ball['dy'] = max(-0.05, min(0.05, -ball['dy']))  
-                      
-        # Draw the balls
+            # Decrease the score if the ball reaches the bottom
+            if ball['y'] > height - 50:
+                score -= 1
+                ball['dy'] = 0
+        
+        # Draw the balls and text
         window.fill(white)
         for ball in balls:
             if ball['number'] != 0:
                 draw_ball(ball['number'], ball['x'], ball['y'])
+        draw_text("Score: " + str(score), 10, 10)
+        draw_text("Time remaining: " + str(int(30 - (current_game_time - game_time))), 10, 50)
         pygame.display.update()
         
     pygame.quit()
