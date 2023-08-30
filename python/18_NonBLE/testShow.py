@@ -39,7 +39,7 @@ def draw_text(text, x, y):
 def main():
     running = True
     score = 0
-    balls = [create_new_ball() for _ in range(3)]
+    balls = [create_new_ball() for _ in range(8)]
     start_time = time.time()
     game_time = time.time()
     ball_create_time = time.time()
@@ -60,6 +60,7 @@ def main():
         current_time = time.time()
         if current_time - ball_create_time >= 1:
             if len(balls) < 5 or len(balls) > 0:
+                balls.append(create_new_ball())
                 balls.append(create_new_ball())
             else:
                 print("Too many balls! Your score is:", score)
@@ -83,6 +84,7 @@ def main():
                     # Destroy the ball
                     ball['number'] = 0
                     score += 1
+                    break
         
         # Move the balls
         new_balls = []
