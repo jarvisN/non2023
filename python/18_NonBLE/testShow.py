@@ -20,14 +20,15 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 
 # Set up serial port
-ser = serial.Serial('/dev/tty.usbserial-0001', 115200)
+# ser = serial.Serial('/dev/tty.usbserial-0001', 115200)
+ser = serial.Serial('/dev/tty.ESP32test', 115200) 
 balloon_img = pygame.image.load(os.path.join('balloon.png'))
 balloon_img = pygame.transform.scale(balloon_img, (100, 200))
 
 
 
 def create_new_ball():
-    return {'x': random.randint(50, width-50), 'y': 50, 'dx': 0, 'dy': 0.125, 'number': random.randint(1, 5)}
+    return {'x': random.randint(50, width-50), 'y': height - 50, 'dx': 0, 'dy': -0.125, 'number': random.randint(1, 5)}
 
 def draw_ball(number, x, y):
     # # Draw the circle
