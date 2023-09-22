@@ -1,58 +1,52 @@
 #include <Arduino.h>
-#include "BluetoothSerial.h"
 
-BluetoothSerial SerialBT;
-
-
-
-const int fsrPin = 36;             // Analog pin connected to the FSR
-const int knownResistance = 10000; // Resistance of the known resistor in ohms
-
-const int buttonPin = 2;            // Pin connected to the button
-int buttonState = HIGH;             // Current state of the button
-int lastButtonState = HIGH;         // Previous state of the button
-unsigned long lastDebounceTime = 0; // Last time the button state was toggled
-unsigned long debounceDelay = 50;   // Debounce time in milliseconds
-int clickCount = 0;                 // Counter for button clicks
-
-const int PRESS_THRESHOLD = 300;  // Adjust this value based on your sensor's sensitivity
-bool wasPressed = false;
+const int sensorPin1 = 34; // GPIO 34 for Force Sensor 1
+const int sensorPin2 = 35; // GPIO 35 for Force Sensor 2
+const int sensorPin3 = 32; // GPIO 36 for Force Sensor 3
+const int sensorPin4 = 33; // GPIO 39 for Force Sensor 4
+const int sensorPin5 = 25; // GPIO 4 for Force Sensor 5
+const int ledPin = 2;      // Built-in LED, GPIO 2
+const int motor1 = 16;
 
 void setup()
 {
-  Serial.begin(115200);             // Initialize serial communication
-  pinMode(buttonPin, INPUT_PULLUP); // Set the button pin as input with pull-up resistor
+  pinMode(sensorPin1, INPUT);
+  pinMode(sensorPin2, INPUT);
+  pinMode(sensorPin3, INPUT);
+  pinMode(sensorPin4, INPUT);
+  pinMode(sensorPin5, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(motor1, OUTPUT);
+  Serial.begin(115200);
 }
 
 void loop()
 {
-  int fsrValue = analogRead(fsrPin);                                       // Read the analog value from the FSR pin
-  float fsrVoltage = fsrValue * (5.0 / 1023.0);                            // Convert analog value to voltage
-  float fsrResistance = (5.0 - fsrVoltage) * knownResistance / fsrVoltage; // Calculate FSR resistance
+  int sensorValue1 = analogRead(sensorPin1);
+  int sensorValue2 = analogRead(sensorPin2);
+  int sensorValue3 = analogRead(sensorPin3);
+  int sensorValue4 = analogRead(sensorPin4);
+  int sensorValue5 = analogRead(sensorPin5);
 
-  // Calculate force based on calibration data
-  // float force1 = map(fsrResistance, 1000, 10000, 0, 100) + 94; // Example calibration, adjust based on your FSR characteristics
-  int force1 = map(fsrResistance, 1000, 10000, 0, 100) + 94; // Example calibration, adjust based on your FSR characteristics
+  // Threshold value for detecting a press
+  int threshold = 1000;
 
-  if (force1 > 0 and force1 != 83)
+  // Check if any of the sensors are pressed
+  if (sensorValue1 > threshold || sensorValue2 > threshold ||
+      sensorValue3 > threshold || sensorValue4 > threshold ||
+      sensorValue5 > threshold)
   {
-    Serial.println(force1);
+    // If any sensor is pressed, turn on the LED
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(motor1, HIGH);
+    Serial.println("Pressed!");
+  }
+  else
+  {
+    // If no sensor is pressed, turn off the LED
+    digitalWrite(ledPin, LOW);
+    digitalWrite(motor1, LOW);
   }
 
-  // Serial.println(force);
-
-  // Check if the sensor is being pressed
-  if (fsrValue > PRESS_THRESHOLD && !wasPressed)
-  {
-    wasPressed = true;
-    clickCount++;
-    // Serial.println("Sensor pressed!");
-    // Here you can send data based on the press if required
-  }
-  else if (fsrValue <= PRESS_THRESHOLD && wasPressed)
-  {
-    wasPressed = false;
-  }
-
-  delay(300); // Delay for stability
+  delay(100); // Wait for a moment before reading values again
 }
