@@ -38,22 +38,35 @@ def test():
     return "Ok test"
 
 
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     # extract user's message
+#     user_text = event.message.text
+
+#     # check if user's message is "test"
+#     if user_text == "test":
+#         # reply to user
+#         line_bot_api.reply_message(
+#             event.reply_token,
+#             TextSendMessage(text="This is a test message")
+#         )
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # extract user's message
     user_text = event.message.text
 
-    # check if user's message is "test"
-    if user_text == "test":
-        # reply to user
+    # check if user's message is anything
+    if user_text.strip():  # Check if the message is not empty or contains only whitespace
+        # reply to user with "Ok"
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="This is a test message")
+            TextSendMessage(text="Ok")
         )
 
 
 if __name__ == "__main__":
     # host = '171.103.221.226'
-    host = '0.0.0.0'
+    host = '10.148.0.2'
     port = 5000  # replace with the actual port number you want to use
     app.run(debug=True, host=host, port=port)

@@ -59,10 +59,17 @@ def interpret_landmarks(landmarks):
         
         print(f'Finger {i} - MCP angle: {angle_mcp:.2f} degrees, PIP angle: {angle_pip:.2f} degrees')
 
-    
-
-
     return fingers_up
+
+def get_angle_mcp(hand_landmarks):
+    thumb_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP]
+    thumb_pip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
+    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+
+    angle_mcp = calculate_angle(thumb_mcp, thumb_pip, thumb_tip)
+    
+    return angle_mcp
+
 
 
 
@@ -90,6 +97,7 @@ while cap.isOpened():
     cv2.imshow('Hand Tracking', frame)
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
+    print(get_angle_mcp())
 
 # Release Resources
 cap.release()
