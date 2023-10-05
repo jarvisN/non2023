@@ -1,6 +1,9 @@
 import cv2
 import mediapipe as mp
 import math
+import json
+import serial
+import random
 
 # Initialize MediaPipe Hand Tracking
 mp_hands = mp.solutions.hands
@@ -11,67 +14,33 @@ def calculate_angle(a, b, c):
     ab = [b.x - a.x, b.y - a.y]
     bc = [c.x - b.x, c.y - b.y]
 
-    cosine_angle = (ab[0]*bc[0] + ab[1]*bc[1]) / (math.sqrt(ab[0]**2 + ab[1]**2) * math.sqrt(bc[0]**2 + bc[1]**2))
+    cosine_angle = (ab[0] * bc[0] + ab[1] * bc[1]) / (math.sqrt(ab[0] ** 2 + ab[1] ** 2) * math.sqrt(bc[0] ** 2 + bc[1] ** 2))
     angle = math.degrees(math.acos(cosine_angle))
 
     return angle
 
 # Define function to interpret landmarks as fingers up
 def interpret_landmarks(landmarks):
-    # Get the tip of the thumb, index, middle, ring, and pinky fingers
-    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-    index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-    middle_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-    ring_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
-    pinky_tip = landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+    # Initialize an empty list to store the angles for all fingers
+    finger_angles = []
 
-    # Check which fingers are up
-    fingers_up = [
-        thumb_tip.x > landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP].x,
-        index_tip.y < landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y,
-        middle_tip.y < landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y,
-        ring_tip.y < landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP].y,
-        pinky_tip.y < landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y,
-    ]
-    
-     # Get the landmarks for the thumb
-    thumb_mcp = landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP]
-    thumb_pip = landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
-    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    # Iterate through each finger
+    for finger_landmark in mp_hands.HandLandmark:
+        # Check if the landmark is for a finger tip
+        if "TIP" in finger_landmark.name:
+            tip_landmark = landmarks.landmark[finger_landmark]
+            mcp_landmark = landmarks.landmark[finger_landmark.value - 2]  # MCP (Metacarpophalangeal) landmark
+            pip_landmark = landmarks.landmark[finger_landmark.value - 1]  # PIP (Proximal Interphalangeal) landmark
 
-    # Calculate the angles
-    angle_mcp = calculate_angle(thumb_mcp, thumb_pip, thumb_tip)
-    angle_pip = calculate_angle(thumb_pip,thumb_tip,thumb_mcp)
-    
-    # Get the landmarks for each finger
-    finger_landmarks = [
-        [mp_hands.HandLandmark.THUMB_MCP, mp_hands.HandLandmark.THUMB_IP, mp_hands.HandLandmark.THUMB_TIP],
-        [mp_hands.HandLandmark.INDEX_FINGER_MCP, mp_hands.HandLandmark.INDEX_FINGER_PIP, mp_hands.HandLandmark.INDEX_FINGER_TIP],
-        [mp_hands.HandLandmark.MIDDLE_FINGER_MCP, mp_hands.HandLandmark.MIDDLE_FINGER_PIP, mp_hands.HandLandmark.MIDDLE_FINGER_TIP],
-        [mp_hands.HandLandmark.RING_FINGER_MCP, mp_hands.HandLandmark.RING_FINGER_PIP, mp_hands.HandLandmark.RING_FINGER_TIP],
-        [mp_hands.HandLandmark.PINKY_MCP, mp_hands.HandLandmark.PINKY_PIP, mp_hands.HandLandmark.PINKY_TIP],
-    ]
+            # Calculate the angles
+            angle_mcp = calculate_angle(mcp_landmark, pip_landmark, tip_landmark)
+            # angle_pip = calculate_angle(pip_landmark, tip_landmark, mcp_landmark)
 
-    # Calculate and print the angles for each finger
-    for i, (mcp, pip, tip) in enumerate(finger_landmarks):
-        angle_mcp = calculate_angle(landmarks.landmark[mcp], landmarks.landmark[pip], landmarks.landmark[tip])
-        angle_pip = calculate_angle(landmarks.landmark[pip], landmarks.landmark[tip], landmarks.landmark[mcp])
-        
-        print(f'Finger {i} - MCP angle: {angle_mcp:.2f} degrees, PIP angle: {angle_pip:.2f} degrees')
+            # Append the angles to the finger_angles list
+            # finger_angles.append((angle_mcp, angle_pip))
+            finger_angles.append(angle_mcp)
 
-    return fingers_up
-
-def get_angle_mcp(hand_landmarks):
-    thumb_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP]
-    thumb_pip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP]
-    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-
-    angle_mcp = calculate_angle(thumb_mcp, thumb_pip, thumb_tip)
-    
-    return angle_mcp
-
-
-
+    return finger_angles
 
 # Capture Video
 cap = cv2.VideoCapture(0)
@@ -87,17 +56,39 @@ while cap.isOpened():
     if result.multi_hand_landmarks:
         for hand_landmarks in result.multi_hand_landmarks:
             mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-            fingers_up = interpret_landmarks(hand_landmarks)
-            cv2.putText(frame, f'Thumb: {"Up" if fingers_up[0] else "Down"}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-            cv2.putText(frame, f'Index: {"Up" if fingers_up[1] else "Down"}', (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-            cv2.putText(frame, f'Middle: {"Up" if fingers_up[2] else "Down"}', (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-            cv2.putText(frame, f'Ring: {"Up" if fingers_up[3] else "Down"}', (50, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-            cv2.putText(frame, f'Pinky: {"Up" if fingers_up[4] else "Down"}', (50, 250), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+            finger_angles = interpret_landmarks(hand_landmarks)
+
+            # # Create a dictionary to store finger angles
+            # finger_data = {
+            #     "thumb": finger_angles[0],
+            #     "index": finger_angles[1],
+            #     "middle": finger_angles[2],
+            #     "ring": finger_angles[3],
+            #     "pinky": finger_angles[4]
+            # }
+
+            # # Convert the finger data to JSON
+            # json_data = json.dumps(finger_data)
+            # # print(json_data)
+
+            # Open a serial connection to Arduino (Replace 'COMX' with your Arduino's COM port)
+            ser = serial.Serial('COM19', baudrate=9600)  # Replace 'COMX' with your Arduino's COM port
+
+            # # Send the JSON data to Arduino
+            # ser.write(json_data.encode())
+            # print(json_data.encode())
+
+            # # Close the serial connection
+            # ser.close()
+            random_number = random.randint(0, 100)
+            print(random_number)
+            ser.write(random_number)
+            ser.close()
+
     # Display the frame
     cv2.imshow('Hand Tracking', frame)
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
-    print(get_angle_mcp())
 
 # Release Resources
 cap.release()
