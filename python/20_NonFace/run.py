@@ -11,8 +11,8 @@ embedder = FaceNet()
 video_capture = cv2.VideoCapture(0)
 
 # โหลด embeddings และ labels ของใบหน้าที่คุณรู้จัก (คุณต้องสร้าง embeddings นี้ล่วงหน้า)
-known_face_encodings = np.load('known_face_encodings.npy')
-known_face_names = np.load('known_face_names.npy')
+known_face_encodings = np.load('data/known_face_encodings.npy')
+known_face_names = np.load('data/known_face_names.npy')
 
 # Check if known_face_encodings is not empty
 if known_face_encodings.size > 0:

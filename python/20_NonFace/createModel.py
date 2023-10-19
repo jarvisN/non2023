@@ -3,6 +3,7 @@ from mtcnn.mtcnn import MTCNN
 import cv2
 import numpy as np
 import os
+import shutil
 
 # สร้างตัวตรวจจับใบหน้าและโมเดล FaceNet
 detector = MTCNN()
@@ -38,3 +39,16 @@ for filename in os.listdir(known_people_folder):
 # บันทึก embeddings และ labels ลงไฟล์
 np.save('known_face_encodings.npy', known_face_encodings)
 np.save('known_face_names.npy', known_face_names)
+
+# บันทึกเส้นทางไปยังไฟล์ known_face_encodings.npy และ known_face_names.npy
+source_encodings_path = 'known_face_encodings.npy'
+source_names_path = 'known_face_names.npy'
+
+# เส้นทางไปยังโฟลเดอร์ที่คุณต้องการย้ายไป
+destination_folder = 'data'
+
+# ย้ายไฟล์ known_face_encodings.npy ไปยังโฟลเดอร์ 'data'
+shutil.move(source_encodings_path, os.path.join(destination_folder, 'known_face_encodings.npy'))
+
+# ย้ายไฟล์ known_face_names.npy ไปยังโฟลเดอร์ 'data'
+shutil.move(source_names_path, os.path.join(destination_folder, 'known_face_names.npy'))
