@@ -14,6 +14,14 @@ video_capture = cv2.VideoCapture(0)
 known_face_encodings = np.load('known_face_encodings.npy')
 known_face_names = np.load('known_face_names.npy')
 
+# Check if known_face_encodings is not empty
+if known_face_encodings.size > 0:
+    # Convert known_face_encodings to a 2D array if it's 1D
+    if known_face_encodings.ndim == 1:
+        known_face_encodings = np.vstack(known_face_encodings)
+else:
+    print("No known face encodings found.")
+
 while True:
     # ดึงเฟรมภาพมาจากวีดีโอ
     ret, frame = video_capture.read()
@@ -38,9 +46,13 @@ while True:
     # จดจำใบหน้า
     face_names = []
     for face_encoding in face_encodings:
-        distances = np.linalg.norm(known_face_encodings - face_encoding, axis=1)
+        face_encoding = np.expand_dims(face_encoding, axis=0)
+        # distances = np.linalg.norm(known_face_encodings - face_encoding, axis=1)
+        distances = np.linalg.norm(known_face_encodings - face_encoding)
         best_match_index = np.argmin(distances)
-        if distances[best_match_index] < 0.6:
+        
+        # if distances[best_match_index] < 0.6:
+        if distances and 0 <= best_match_index < distances.size and distances[best_match_index] < 0.6:
             name = known_face_names[best_match_index]
         else:
             name = "Unknown"
@@ -51,7 +63,7 @@ while True:
         x, y, width, height = face['box']
         cv2.putText(frame, name, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
 
-    # แสดงรูปภาพผลลัพธ์
+    # แสดงเฟรมภาพผลลัพธ์
     cv2.imshow('Video', frame)
 
     # กด 'q' เพื่อปิด!
