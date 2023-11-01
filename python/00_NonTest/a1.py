@@ -1,8 +1,7 @@
-import time
+inclusive_range = range(6, 21)
+for num in inclusive_range:
+    print(num)
 
-try:
-    while True:
-        print("test 1")
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("Program interrupted by user")
+# If you want to convert it to a list:
+inclusive_list = list(inclusive_range)
+print(inclusive_list)
