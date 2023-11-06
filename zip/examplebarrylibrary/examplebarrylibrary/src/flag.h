@@ -1,1 +1,0 @@
-bool hasConfiguration = true;
