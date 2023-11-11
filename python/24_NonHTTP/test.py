@@ -58,11 +58,15 @@ def echo():
         return jsonify({'error': 'No message provided'})
     
     
-@app.route('/rfid',methods=['GET'])
-def rfid():
-    data = request.get_json()
+# Define a route for handling HTTP GET requests
+@app.route('/non', methods=['POST'])
+def non():
+    data = request.args.get('data', default=None, type=str)
     print(data)
-    return "test_api"
+    return jsonify({'response': 'ok '})
+
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True , port=5000)
+    app.run(debug=True , port=8000)
