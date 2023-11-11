@@ -1,8 +1,11 @@
 import React from 'react'
 
 function myButton() {
+  function handleCick() {
+    alert("you clicked me!")
+  }
   return (
-    <button>myButton</button>
+    <button onClick={handleCick}>myButton</button>
   )
 }
 

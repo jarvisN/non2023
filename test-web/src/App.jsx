@@ -5,13 +5,19 @@ import MyButton from './components/MyButton.jsx'
 
 function App() {
 
+  const [count,setCount] = useState(0)
+  const [name,setName] = useState("Non")
+
   return (
-    <div className="App">
+    <>
+      <h1>
+        My profile
+      </h1>
       <p>
-        test
+        {name}
       </p>
       <MyButton />
-    </div>
+    </>
   )
 }
 
