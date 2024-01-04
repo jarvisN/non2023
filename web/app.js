@@ -15,6 +15,10 @@ app.post('/submit-form', (req, res) => {
   res.send('Form submitted');
 });
 
+app.get('/test_get', (req,res) =>{
+  res.send('test');
+});
+
 app.post('/testData', (req, res) => {
     const { username, password } = req.body;
     // Process form data here

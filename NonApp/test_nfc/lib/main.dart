@@ -109,7 +109,7 @@ class MyAppState extends State<MyApp> {
 
   void _ndefWriteLock() {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      var ndef```
+      var ndef;
 = Ndef.from(tag);
       if (ndef == null) {
         result.value = 'Tag is not ndef';
