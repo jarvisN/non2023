@@ -1,0 +1,14 @@
+{
+  "name": "nontest",
+  "version": "1.0.0",
+  "description": "test and train express with typescipt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Non_Titiwut",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
